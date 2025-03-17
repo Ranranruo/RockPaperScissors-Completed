@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Document</title>
+   
+</head>
+
+<body>
+    <h1 style="text-align: center;">CREATE ROOM</h1>
+    <form style="display: flex; justify-content: center;">
+        <input type="text" placeholder="name" name="name">
+        <button>CREATE</button>
+    </form>
+    <script>
+        const socket = io();
+
+        document.querySelector("form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const roomName = document.querySelector("input").value;
+            socket.emit('create', roomName);
+        });
+
+        socket.on('already', (name) => {
+            alert(`${name} is already use`)
+        });
+
+        socket.on('join', function (name) {
+            console.log("a");
+            location.href = `/room?name=${name}`;
+        });
+    </script>
+</body>
+
+</html>
