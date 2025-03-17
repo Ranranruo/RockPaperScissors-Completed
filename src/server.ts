@@ -5,6 +5,11 @@ import { Server } from 'socket.io';
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+const game = io.of('/game');
+
+game.on('connection', (socket) => {
+  console.log("conn");
+});
 
 interface room {
   name: string,
@@ -38,7 +43,6 @@ io.on('connection', (socket) => {
             name,
             people: [],
         });
-        socket.join(name);
         socket.emit('join', name);
         io.emit('rooms', rooms);
     });
@@ -53,8 +57,8 @@ io.on('connection', (socket) => {
         return room;
       });
       io.emit('rooms', rooms);
-      const currnetRoom = rooms.find(room => room.name = name);
-      socket.to(name).emit('people', currnetRoom!.people.length);
+      const currnetRoom = rooms.find(room => room.name == name);
+      io.to(name).emit('people', currnetRoom!.people.length);
     });
     socket.on('disconnect', () => {
       const idx = rooms.findIndex(room => room.people[0] == socket.id || room.people[1] == socket.id);
