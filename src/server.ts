@@ -1,15 +1,13 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
+import game from './game';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-const game = io.of('/game');
+export const io = new Server(server);
 
-game.on('connection', (socket) => {
-  console.log("conn");
-});
+game();
 
 interface room {
   name: string,
@@ -52,6 +50,7 @@ io.on('connection', (socket) => {
     socket.on('join', (name) => {
       if(!rooms.some(room => room.name == name)) return socket.emit('noroom', name);
       if(rooms.some(room => room.people.length >= 2 && room.name == name)) return socket.emit('already', name);
+      socket.join(name);
       rooms.map(room => {
         if(room.name == name) room.people.push(socket.id);
         return room;
