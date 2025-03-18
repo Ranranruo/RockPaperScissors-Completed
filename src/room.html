@@ -7,6 +7,8 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
+    <a href="/">방 나가기</a>
+    <h1 id="count"></h1>
     <script>
         const socket = io();    
 
@@ -25,6 +27,15 @@
         });
 
         socket.on('people', people => {
+            if(people == 2){
+                const game = io('/game');
+                game.emit('start', params.get('name'));
+                console.log("start!");
+                game.on('count', (count) => {
+                    document.querySelector("#count").innerText = count;
+                    console.log(count);
+                })
+            }
         }) 
         // const 
         // socket.emit('join', )

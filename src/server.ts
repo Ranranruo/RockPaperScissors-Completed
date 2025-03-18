@@ -10,6 +10,7 @@ export const io = new Server(server);
 game();
 
 interface room {
+  state: 'waiting' | 'playing' | 'finish',
   name: string,
   people: any[]
 }
@@ -32,12 +33,13 @@ app.get('/join', (req, res) => {
 });
 app.get('/room', (req, res) => {
   res.sendFile(__dirname + '/room.html');
-})
+});
 
 io.on('connection', (socket) => {
     socket.on('create', (name) => {
       if (rooms.some(room => room.name === name)) return socket.emit('already', name);
         rooms.push({
+            state: 'waiting',
             name,
             people: [],
         });
