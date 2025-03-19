@@ -40,7 +40,7 @@ const game = () => {
             socket.join(name);
         });
         socket.on('rps', (rps) => {
-            
+            const idx: number = games.findIndex(game => game);
         });
     });
 
