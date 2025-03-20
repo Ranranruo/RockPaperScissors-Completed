@@ -9,6 +9,12 @@
 <body>
     <a href="/">방 나가기</a>
     <h1 id="count"></h1>
+    <h1></h1>
+    <div>
+        <button data-value="rock">Rock</button>
+        <button data-value="paper">Paper</button>
+        <button data-value="scissors">Scissors</button>
+    </div>
     <script>
         const socket = io();    
 
@@ -29,11 +35,13 @@
         socket.on('people', people => {
             if(people == 2){
                 const game = io('/game');
+                document.querySelectorAll("button").forEach(btn=>btn.addEventListener("click", (e)=> {
+                    game.emit('rps', e.target.dataset.value);
+                }));
                 game.emit('start', params.get('name'));
                 console.log("start!");
                 game.on('count', (count) => {
                     document.querySelector("#count").innerText = count;
-                    console.log(count);
                 })
             }
         }) 
