@@ -43,6 +43,18 @@
                 game.on('count', (count) => {
                     document.querySelector("#count").innerText = count;
                 })
+                game.on('result', (result) => {
+                    const {you, opponent} = result;
+                    if(you == opponent) document.querySelector("#count").innerText = "draw";
+                    // 연결 해제
+                    if(you == "rock" && opponent == "paper") document.querySelector("#count").innerText = "lose";
+                    if(you == "rock" && opponent == "scissors") document.querySelector("#count").innerText = "win";
+                    if(you == "paper" && opponent == "scissors") document.querySelector("#count").innerText = "lose";
+                    if(you == "paper" && opponent == "rock") document.querySelector("#count").innerText = "win";
+                    if(you == "sicssors" && opponent == "rock") document.querySelector("#count").innerText = "lose";
+                    if(you == "sicssors" && opponent == "paper") document.querySelector("#count").innerText = "win";
+                    setTimeout(()=>{game.disconnect()},1000);
+                })
             }
         }) 
         // const 
